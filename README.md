@@ -43,3 +43,26 @@ two `<link>` tags reverts the site to the old dark theme.
 `biobrain-assets/`, `brazil-assets/` and `maxhealth-assets/` hold the 40 project
 screenshots referenced by `project-data.jsx`. `clippings/` and `screenshots/`
 are unreferenced extras kept for reference.
+
+`raw-uploads/` holds the 46 original un-processed screenshots these were cropped
+and renamed from. Nothing references them; they are the pre-production source.
+
+## Reference & archive
+
+`Anshul Shukla - Portfolio.html` (repo root) is the **standalone export** — a
+single self-contained file with every script, stylesheet, font and image
+inlined as base64. It needs no server and no network. It is the visual
+reference the loose source files in this repo were reconciled against, and the
+two now render identically.
+
+`archive/` keeps the superseded originals, verbatim:
+
+| File | Note |
+| --- | --- |
+| `archive/app.jsx` | Pre-glass theme defaults (red `#FF3D2E` accent, lime, purple glows) |
+| `archive/index.html` | Older entry point — no `glass.css`, no lava, dark background |
+| `archive/Anshul Shukla - Portfolio.html` | Older entry-point variant, same era |
+| `archive/.thumbnail` | Bundler-generated preview artifact |
+
+`blobs.js` (repo root) is the earlier background effect that `lava.js` replaced.
+Nothing loads it — it is kept for reference only.
