@@ -41,11 +41,14 @@ two `<link>` tags reverts the site to the old dark theme.
 ## Assets
 
 `biobrain-assets/`, `brazil-assets/` and `maxhealth-assets/` hold the 40 project
-screenshots referenced by `project-data.jsx`. `clippings/` and `screenshots/`
-are unreferenced extras kept for reference.
+screenshots referenced by `project-data.jsx`, as **WebP** capped at 2400px wide
+(4.1 MB total, down from 61 MB as PNG). `clippings/` and `screenshots/` are
+unreferenced extras kept for reference.
 
-`raw-uploads/` holds the 46 original un-processed screenshots these were cropped
-and renamed from. Nothing references them; they are the pre-production source.
+`raw-uploads/` holds the 46 original un-processed screenshots, at full
+resolution and untouched. Nothing references them — they are the archival
+source the assets above were derived from. Re-encode from these if you ever
+need different dimensions or quality.
 
 ## Reference & archive
 
