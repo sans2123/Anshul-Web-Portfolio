@@ -1,4 +1,5 @@
 // HOME PAGE
+
 function HomePage({ setPage, openProject }) {
   // Parallax for hero stickers
   const heroRef = React.useRef(null);
@@ -15,28 +16,33 @@ function HomePage({ setPage, openProject }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // 2 × 2 — each tile opens its project detail; cover art is pulled from that
+  // project's own gallery. 'more' has no shot of its own, so it keeps the pattern.
   const bentoItems = [
-    { id: 'biobrain', title: 'BioBrain', tags: ['MROps', 'AI', 'B2B'], variant: 'cream', col: 'span 7', row: 'span 4', label: 'BioBrain — hero shot' },
-    { id: 'maxhealth', title: 'Max MyHealth', tags: ['Healthcare', 'iOS', 'Android'], variant: 'accent', col: 'span 5', row: 'span 4', label: 'Max MyHealth — app' },
-    { id: 'brazil', title: 'Brazil Tournament Mgmt', tags: ['Sports', 'B2B'], variant: 'dark', col: 'span 5', row: 'span 3', label: 'Brazil TMS — dashboard' },
-    { id: 'more', title: 'More Work', tags: ['Mix'], variant: 'lime', col: 'span 4', row: 'span 3', label: 'WTT, AEW & more' },
-    { id: 'wtt', title: 'WTT Federation', tags: ['Design System'], variant: 'cream', col: 'span 3', row: 'span 3', label: 'Components' },
+    { id: 'biobrain', title: 'BioBrain', tags: ['MROps', 'B2B', 'Restech', 'Branding', 'Design System'], variant: 'cream', label: 'BioBrain — analytics dashboard', img: 'biobrain-assets/home-cover.jpg', span: '7x5', flag: 'Start here' },
+    { id: 'maxhealth', title: 'Max MyHealth', tags: ['Healthcare', 'iOS', 'Android'], variant: 'accent', label: 'Max MyHealth — booking flow', img: 'maxhealth-assets/home-cover.jpg', span: '5x5' },
+    { id: 'brazil', title: 'Brazil Tournament Mgmt', tags: ['Sports', 'B2B', 'B2C'], variant: 'dark', label: 'Brazil TMS — tournament system', img: 'brazil-assets/home-cover.jpg', span: '5x4' },
+    { id: 'more', title: 'More Work', tags: ['Website', 'Redesign', 'Mix'], variant: 'lime', label: 'AEW, Felizeek & more', img: 'biobrain-assets/more-cover.jpg', span: '7x4' },
   ];
 
   const skillTags = [
     'UX Research', 'Wireframes', 'Prototyping', 'Visual Design', 'Design Systems',
     'User Journeys', 'Personas', 'Sitemaps', 'Interaction Design', 'Market Research',
     'Cross-functional', 'Figma', 'Adobe XD', 'Frontend', 'Design × Code',
+    'Claude Code', 'Claude Design',
   ];
 
   return (
     <div className="page" data-screen-label="01 Home">
       {/* ============ HERO ============ */}
       <section className="hero" ref={heroRef} data-screen-label="01 Home / Hero">
+        {/* Shader stack (Swirl → blobs → ChromaFlow → FlutedGlass → FilmGrain).
+            hero-shader.js adopts this pane and renders into it. */}
+        <div className="hero-glass" aria-hidden="true"></div>
+
         <div>
           <div className="hero-eyebrow">
-            <span className="hero-eyebrow-dot"></span>
-            <span>Portfolio · 2026 — Edition One</span>
+            <span>Portfolio — Edition One</span>
           </div>
           <div className="hero-name">
             <span>I&apos;m</span>
@@ -63,16 +69,14 @@ function HomePage({ setPage, openProject }) {
           </Reveal>
           <Reveal delay={420}>
             <div className="hero-meta">
-              <span>Currently</span>
-              <b>UI/UX Lead, Tooliqa</b>
-              <span style={{ marginTop: 8 }}>Previously</span>
-              <b>MAX Healthcare · Stupa · AEW</b>
+              <span>Previously</span>
+              <b>Tooliqa · MAX Healthcare · Stupa · AEW</b>
             </div>
           </Reveal>
         </div>
 
         {/* Stickers */}
-        <span className="sticker" data-parallax="-0.25" data-rot="-8" style={{ top: '24%', right: '8%', transform: 'rotate(-8deg)' }}>★ 5+ yrs · B2B + B2C</span>
+        <span className="sticker" data-parallax="-0.25" data-rot="-8" style={{ top: '24%', right: '8%', transform: 'rotate(-8deg)' }}>★ 4+ yrs · B2B + B2C</span>
         <span className="sticker dark" data-parallax="-0.4" data-rot="6" style={{ top: '50%', right: '14%', transform: 'rotate(6deg)' }}>Design × Code</span>
         <span className="sticker lime" data-parallax="-0.15" data-rot="-3" style={{ bottom: '38%', left: '6%', transform: 'rotate(-3deg)' }}>NIFT &apos;19</span>
       </section>
@@ -92,21 +96,26 @@ function HomePage({ setPage, openProject }) {
             <Reveal
               key={b.id}
               delay={i * 80}
-              className={`bento-card ${b.variant === 'accent' ? 'accent' : b.variant === 'dark' ? 'dark' : b.variant === 'lime' ? 'lime' : ''}`}
-              style={{ gridColumn: b.col, gridRow: b.row }}
+              className={`bento-card ${b.img ? 'has-image' : ''} ${b.flag ? 'is-featured' : ''} ${b.variant === 'accent' ? 'accent' : b.variant === 'dark' ? 'dark' : b.variant === 'lime' ? 'lime' : ''}`}
+              data-span={b.span}
               data-cursor="text"
               data-cursor-label="Open"
               onClick={() => openProject && openProject(b.id)}
             >
-              <div className="ph" style={{
-                position: 'absolute', inset: 0, zIndex: 0,
-                opacity: b.variant === 'accent' || b.variant === 'dark' ? 0.15 : 0.4
-              }}>
-                <div className={`ph-pattern ${b.variant === 'accent' || b.variant === 'dark' ? 'dark' : ''}`} style={{ position: 'absolute', inset: 0 }}></div>
-              </div>
+              {b.flag ? <span className="bento-flag">{b.flag}</span> : null}
+              {b.img ? (
+                <img className="bento-card-img" src={b.img} alt={b.label} loading="lazy" decoding="async" />
+              ) : (
+                <div className="ph" style={{
+                  position: 'absolute', inset: 0, zIndex: 0,
+                  opacity: b.variant === 'accent' || b.variant === 'dark' ? 0.15 : 0.4
+                }}>
+                  <div className={`ph-pattern ${b.variant === 'accent' || b.variant === 'dark' ? 'dark' : ''}`} style={{ position: 'absolute', inset: 0 }}></div>
+                </div>
+              )}
               <span className="pill-cta">View →</span>
               <span style={{
-                position: 'absolute', top: 18, left: 22, fontFamily: 'var(--font-mono)',
+                position: 'absolute', top: b.flag ? 58 : 18, left: 22, fontFamily: 'var(--font-mono)',
                 fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.12em',
                 opacity: 0.65, zIndex: 2,
               }}>
@@ -125,11 +134,12 @@ function HomePage({ setPage, openProject }) {
 
       {/* ============ OUTRO ============ */}
       <section className="outro" data-screen-label="01 Home / Outro">
+        <div className="glass-pane" data-glass-pane data-glass-intensity="0.32" aria-hidden="true"></div>
         <Reveal>
           <div className="mono-cap" style={{ color: 'var(--muted)', marginBottom: 24 }}>— A little about me</div>
           <p className="outro-text">
-            I&apos;m a Product Designer with <em>5+ years</em> of experience across healthcare, sports tech,
-            research platforms, and enterprise. I trained at <em>NIFT</em> in fashion technology — where I learned
+            I&apos;m a Product Designer with <em>4+ years of experience</em> across healthcare, sports tech,
+            research platforms, and enterprise. I trained at <em>NIFT</em> in design and technology — where I learned
             that good design is, above all else, a way of <em>communicating</em>.
           </p>
         </Reveal>

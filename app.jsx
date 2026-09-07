@@ -5,8 +5,8 @@ const DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "#131317",
   "lime": "#E8EAEE",
   "showCursor": true,
-  "glow": ["#101014", "#1A1B22", "#0B0B0F"],
-  "glowIntensity": 32,
+  "glow": ["#0A0A11", "#232634", "#050508"],
+  "glowIntensity": 35,
   "glowOn": true
 }/*EDITMODE-END*/;
 
@@ -25,36 +25,42 @@ function App() {
     } else {
       document.body.style.cursor = 'none';
     }
-    const glow = Array.isArray(tweaks.glow) ? tweaks.glow : ['#101014', '#1A1B22', '#0B0B0F'];
+    const glow = Array.isArray(tweaks.glow) ? tweaks.glow : ['#0A0A11', '#232634', '#050508'];
     document.documentElement.style.setProperty('--glow-1', glow[0]);
     document.documentElement.style.setProperty('--glow-2', glow[1] || glow[0]);
     document.documentElement.style.setProperty('--glow-3', glow[2] || glow[0]);
     const on = tweaks.glowOn !== false;
-    const intensity = (typeof tweaks.glowIntensity === 'number' ? tweaks.glowIntensity : 50) / 100;
+    const intensity = (typeof tweaks.glowIntensity === 'number' ? tweaks.glowIntensity : 35) / 100;
     document.documentElement.style.setProperty('--blob-opacity', on ? String(intensity) : '0');
   }, [tweaks]);
 
-  const setPage = (next) => {
-    if (next === page) return;
+  // `project` is applied in the same frame as the page swap, so navigating from
+  // a home tile straight into a case study is ONE curtain, not two.
+  const goTo = (next, project = null) => {
+    if (next === page && project === activeProject) return;
     setTransitioning(true);
-    setActiveProject(null);
     window.scrollTo({ top: 0, behavior: 'instant' });
     setTimeout(() => {
       setPageState(next);
+      setActiveProject(project);
     }, 500);
     setTimeout(() => {
       setTransitioning(false);
     }, 1200);
   };
 
+  const setPage = (next) => {
+    if (next === page && !activeProject) return;
+    goTo(next, null);
+  };
+
   const openProject = (id) => {
-    // If on home, route to work first
-    if (page !== 'work') {
-      setPage('work');
-      setTimeout(() => setActiveProject(id), 1300);
+    // Already on work: the detail view swaps in place, no page transition.
+    if (page === 'work') {
+      setActiveProject(id);
       return;
     }
-    setActiveProject(id);
+    goTo('work', id);
   };
   const closeProject = () => setActiveProject(null);
 
@@ -106,7 +112,7 @@ function App() {
           />
           <TweakSlider
             label="Intensity"
-            value={typeof tweaks.glowIntensity === 'number' ? tweaks.glowIntensity : 32}
+            value={typeof tweaks.glowIntensity === 'number' ? tweaks.glowIntensity : 35}
             min={0}
             max={100}
             step={5}

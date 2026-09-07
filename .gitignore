@@ -1,4 +1,17 @@
+# OS cruft
 .DS_Store
+._*
 Thumbs.db
+desktop.ini
+
+# Host / tooling state
+.vercel/
+.wrangler/
+.cache/
 node_modules/
 *.log
+
+# Editor
+.idea/
+.vscode/
+*.swp

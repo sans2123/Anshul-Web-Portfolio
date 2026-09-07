@@ -9,6 +9,7 @@ const PROJECTS = [
     role: 'UI/UX Lead',
     company: 'Tooliqa Innovations',
     duration: '14 months',
+    link: { label: 'Biobrain.io', href: 'https://www.biobrain.io/' },
     tags: ['MROps', 'AI Platform', 'B2B SaaS', 'Design System', 'Branding'],
     tagline: 'A next-gen Market Research Operations platform — unifying AI, automation, and agility into one workspace.',
     body: (
@@ -51,7 +52,7 @@ const PROJECTS = [
     company: 'Stupa Analytics',
     duration: '10 months',
     tags: ['Sports Tech', 'Esports', 'B2B Platform', 'Dashboards'],
-    tagline: 'A tournament management system built for local Brazilian organizers — automating brackets, scoring, and player registration across sports and esports.',
+    tagline: 'A tournament management system built for local and international bodies — automating brackets, scoring, and player registration across sports and esports.',
     body: (
       <>
         Tournament organizers in Brazil have long lived inside spreadsheets and group chats. This platform replaces
@@ -82,7 +83,7 @@ const PROJECTS = [
     role: 'UI/UX Designer',
     company: 'MAX Healthcare',
     duration: '2 years',
-    tags: ['Healthcare', 'Mobile App', 'iOS', 'Android', 'Telemedicine'],
+    tags: ['Healthcare', 'Mobile App', 'iOS', 'Telemedicine', 'Branding'],
     tagline: 'A unified digital healthcare portal — appointments, video consults, lab tests, IPD tracking, and an emergency button, all under one roof.',
     body: (
       <>
@@ -118,27 +119,31 @@ const PROJECTS = [
     title_em: 'work',
     year: '2019 — 24',
     role: 'Various',
-    company: 'AEW · Stupa · WTT',
+    company: 'Mix',
     duration: 'Selected',
-    tags: ['Mix', 'Design Systems', 'Enterprise', 'Web', 'Mobile'],
-    tagline: 'A grab-bag of end-to-end projects — enterprise platforms, federation design systems, and a few smaller experiments along the way.',
+    tags: ['Mix', 'Enterprise', 'Web', 'Redesign'],
+    tagline: 'A grab-bag of end-to-end projects — enterprise dashboards, a marketing-site redesign, and early-stage product explorations.',
     body: (
       <>
         A curated selection from across my career: <strong>water and electrical distribution dashboards</strong> for
         Allied Engineering Works — large-scale industrial UX with a partial frontend handoff;
-        the <strong>WTT (World Table Tennis Federation)</strong> ecosystem — event creation, management, analysis,
-        and broadcasting workflows built on a shared design system; and a few smaller experiments and side-quests
-        I&apos;m fond of. Each project sharpened a different muscle — systems thinking, data density, broadcast UX, or the discipline of shipping fast.
+        a full <strong>marketing site redesign for Felizeek</strong> — home, services, about and a blog system
+        rebuilt end to end; and early-stage product work at <strong>Work Companion</strong> alongside a few smaller
+        experiments I&apos;m fond of. Each project sharpened a different muscle — systems thinking, data density,
+        editorial layout, or the discipline of shipping fast.
       </>
     ),
     galleryItems: [
-      { col: 'span 6', row: 'span 3', label: 'AEW — water distribution dashboard', variant: 'cream' },
-      { col: 'span 6', row: 'span 3', label: 'AEW — electrical schematics UI', variant: 'dark' },
-      { col: 'span 4', row: 'span 3', label: 'WTT — event manager', variant: 'cream' },
-      { col: 'span 4', row: 'span 3', label: 'WTT — broadcasting console', variant: 'accent' },
-      { col: 'span 4', row: 'span 3', label: 'WTT — fan experience', variant: 'cream' },
-      { col: 'span 8', row: 'span 3', label: 'Side project / explorations', variant: 'lime' },
-      { col: 'span 4', row: 'span 3', label: 'Component library', variant: 'cream' },
+      { src: 'morework-assets/home.jpg', col: 'span 4', row: 'span 5', label: 'Felizeek — home', pos: 'top' },
+      { src: 'morework-assets/about-us.jpg', col: 'span 4', row: 'span 5', label: 'Felizeek — about', pos: 'top' },
+      { src: 'morework-assets/services.jpg', col: 'span 4', row: 'span 5', label: 'Felizeek — services', pos: 'top' },
+      { src: 'morework-assets/blogs.jpg', col: 'span 6', row: 'span 4', label: 'Felizeek — blog index', pos: 'top' },
+      { src: 'morework-assets/felizeek-overview.jpg', col: 'span 6', row: 'span 4', label: 'Growtomation — full site overview', pos: 'top' },
+      { src: 'morework-assets/distribution-chain.jpg', col: 'span 6', row: 'span 3', label: 'AEW — distribution chain, add transformer', pos: 'top' },
+      { src: 'morework-assets/distribution-chain-2.jpg', col: 'span 6', row: 'span 3', label: 'AEW — distribution chain, schematic detail', pos: 'top' },
+      { src: 'morework-assets/product-placement-selection.jpg', col: 'span 4', row: 'span 3', label: 'Work Companion — product placement', pos: 'top' },
+      { src: 'morework-assets/woco-revamp-subscribe.jpg', col: 'span 4', row: 'span 3', label: 'Work Companion — subscribe revamp', pos: 'top' },
+      { src: 'morework-assets/real-estate.jpg', col: 'span 4', row: 'span 4', label: 'Real estate — listings concept', pos: 'top' },
     ],
   },
 ];

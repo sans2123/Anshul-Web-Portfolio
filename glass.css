@@ -21,11 +21,11 @@
   --surface-2: rgba(16,16,21,0.54);
   --void: #0C0C10;
 
-  /* lava blob shades — dark, refracted by the glass */
-  --blob-opacity: 0.32;
-  --glow-1: #101014;
-  --glow-2: #1A1B22;
-  --glow-3: #0B0B0F;
+  /* lava blob shades — same dark cool family, deepened + separated for contrast */
+  --blob-opacity: 0.46;
+  --glow-1: #0A0A11;
+  --glow-2: #232634;
+  --glow-3: #050508;
 
   /* glass recipe */
   --glass-bg: rgba(255,255,255,0.34);
@@ -70,8 +70,8 @@ html, body { background: var(--cream); }
 }
 .lava-goo {
   position: absolute; inset: 0;
-  filter: url(#lava-goo) blur(48px);
-  opacity: var(--blob-opacity, 0.32);
+  filter: url(#lava-goo) blur(38px);
+  opacity: var(--blob-opacity, 0.46);
 }
 .lava-blob {
   position: absolute; top: 0; left: 0;
@@ -99,9 +99,14 @@ html, body { background: var(--cream); }
 }
 
 /* ============ NAV — frosted bar so it never collides with content ============ */
+/* Flat tint, not a gradient: the old 0.82→0.45 fade left the lower half nearly
+   transparent, so dark sections passing behind (marquee, footer, dark project
+   heros) darkened the bar and the nav never looked the same twice. One alpha,
+   held high enough that content behind shifts it only slightly — so it reads
+   the way it does over the hero everywhere on the site. */
 .nav {
   mix-blend-mode: normal; color: var(--ink);
-  background: linear-gradient(rgba(236,237,241,0.82), rgba(236,237,241,0.45));
+  background: rgba(236,237,241,0.88);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   border-bottom: 1px solid rgba(19,19,23,0.08);
@@ -275,13 +280,22 @@ html, body { background: var(--cream); }
 
 /* ============ PROJECT DETAIL — one huge frosted pane ============ */
 .project-detail {
-  background: rgba(236,237,241,0.6);
-  backdrop-filter: blur(30px) saturate(150%) brightness(1.03);
-  -webkit-backdrop-filter: blur(30px) saturate(150%) brightness(1.03);
+  /* Opaque backing. This pane used to be a 60% frost over the live page, which
+     let the Work list's huge headlines read straight through it as ghosting.
+     --cream is the page colour the frost was reading as, so the panel looks
+     exactly as designed — just not see-through.
+     (backdrop-filter dropped with it: nothing behind is visible to blur.) */
+  background: var(--cream);
 }
 .project-back { background: var(--ink); color: var(--paper); box-shadow: 0 8px 20px rgba(19,19,23,0.25); }
 .project-back:hover { background: #2A2B33; color: var(--paper); }
 
+.gallery-item.has-image {
+  background:
+    radial-gradient(120% 100% at 15% 0%, color-mix(in srgb, var(--glow-1) 34%, transparent) 0%, transparent 62%),
+    radial-gradient(110% 90% at 90% 100%, color-mix(in srgb, var(--glow-2) 30%, transparent) 0%, transparent 60%),
+    var(--glass-bg);
+}
 .gallery-item {
   background: var(--glass-bg);
   border: 1px solid var(--glass-brd);
@@ -368,4 +382,63 @@ html, body { background: var(--cream); }
 
 @media (prefers-reduced-motion: reduce) {
   .lava-blob, .glass-orb { transition: none; }
+}
+
+/* ============ HERO — shader pane only; text layout stays as authored in
+   styles.css (eyebrow / name / statement / blurb + meta). ============ */
+
+/* ---- shader pane: hero-shader.js renders the Swirl → blobs → ChromaFlow →
+   FlutedGlass → FilmGrain stack into a canvas here. The gradient is the
+   no-WebGL fallback; ::after is a legibility scrim. ---- */
+.hero-glass {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+  background: linear-gradient(155deg, #ffffff 0%, #f0f0f0 48%, #e6e7ec 100%);
+}
+.hero-shader-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; display: block;
+}
+.hero-glass::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(236,237,241,0.62) 0%,
+    rgba(236,237,241,0.34) 44%,
+    rgba(236,237,241,0.16) 100%
+  );
+}
+
+/* hero content rides above the pane */
+.hero > *:not(.hero-glass) { position: relative; z-index: 1; }
+
+
+/* ============ GLASS PANES — the hero's shader, used lightly elsewhere ============
+   Same engine, same stack; `data-glass-intensity` fades the colour layers while
+   the fluting stays readable, and the mask feathers each pane into the page so it
+   reads as atmosphere behind the content, never as a panel. ---- */
+.glass-pane {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+  opacity: 0.5;
+  mix-blend-mode: luminosity;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 70%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 70%, transparent 100%);
+}
+/* fade toward the bottom only — for panes that sit under a page's opening headline */
+.glass-pane.top {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 96%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 96%);
+}
+/* on the dark panels the stack is inverted-light, so it needs far less presence */
+.glass-pane.on-dark { opacity: 0.22; mix-blend-mode: screen; }
+
+.outro, .work-hero, .about-hero, .project-hero { position: relative; }
+.outro > *:not(.glass-pane),
+.work-hero > *:not(.glass-pane),
+.about-hero > *:not(.glass-pane),
+.project-hero > *:not(.glass-pane) { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-pane { opacity: 0.34; }
 }

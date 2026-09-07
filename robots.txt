@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Archival source, not part of the site.
+Disallow: /raw-uploads/
+Disallow: /archive/
+Disallow: /clippings/
+
+# Add once a production domain is live:
+# Sitemap: https://your-domain.com/sitemap.xml

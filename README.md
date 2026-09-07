@@ -3,6 +3,50 @@
 Product design portfolio. Plain React (UMD) + Babel standalone, no build step —
 open `index.html` from any static server and it runs.
 
+## Deploy — Vercel
+
+Pure static, **no build step** — Vercel serves the repo root as-is.
+There is deliberately no `package.json`: adding one makes Vercel try to detect
+a framework and run a build that does not exist.
+
+Import the repo, then:
+
+| Setting | Value |
+| --- | --- |
+| Framework preset | **Other** |
+| Build command | *(leave empty)* |
+| Output directory | `.` |
+| Root directory | `./` |
+| Install command | *(leave empty)* |
+
+Everything else lives in `vercel.json`:
+
+- **Headers** — `nosniff`, `SAMEORIGIN`, `strict-origin-when-cross-origin`, a
+  locked-down `Permissions-Policy`, and an explicit
+  `Content-Type: application/javascript` for `.jsx` (not in the default MIME
+  table, so a direct hit would otherwise download instead of render).
+- **Cache policy** — conservative on purpose. With no bundler there are no
+  hashed filenames, so `.html`/`.css`/`.js`/`.jsx` must revalidate on every
+  request or a deploy could serve new markup against cached scripts. Only
+  `.webp` and `.svg` are cached long (30 days, `stale-while-revalidate`).
+- **`/resume`** — 301 to `anshul-shukla-resume.pdf`.
+- **Catch-all rewrite** — routing lives in React state, not the URL, so any
+  path that isn't a real file gets the app shell instead of a 404. Vercel
+  matches the filesystem before rewrites, so real assets are unaffected.
+
+### Hosting files
+
+| File | Purpose |
+| --- | --- |
+| `vercel.json` | Headers, cache policy, `/resume` redirect, app-shell rewrite |
+| `robots.txt` | Allows everything except the archival directories |
+| `favicon.svg` | Single-file icon — no PNG set, no extra requests |
+| `.gitignore` | OS cruft, `.vercel/`, editor state |
+
+**Still to do before launch:** an `og:image` (1200×630) — the social tags are
+in `index.html` but have no image, and `robots.txt` has a commented-out
+`Sitemap:` line, both waiting on the production domain.
+
 ## Run locally
 
 ```bash
@@ -16,7 +60,7 @@ fetched over HTTP; `file://` will be blocked by CORS).
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Entry point — loads fonts, both stylesheets, then the scripts in order |
+| `index.html` | Entry point — head metadata, the inlined boot loader, fonts, stylesheets, then the scripts in order |
 | `styles.css` | Base editorial layer (type scale, layout, components) |
 | `glass.css` | **Glass theme** — light monochrome palette + frosted-glass surfaces. Loads *after* `styles.css` and overrides it |
 | `app.jsx` | Routing, page transitions, tweaks panel wiring, theme defaults |
@@ -28,6 +72,17 @@ fetched over HTTP; `file://` will be blocked by CORS).
 | `tweaks-panel.jsx` | Live theme editor shell |
 | `lava.js` | Background lava field — metaball blobs merged through an SVG goo filter |
 | `tilt-fx.js` | 3D tilt + specular glare on glass cards |
+| `touch-fx.js` | Touch equivalents of the pointer effects (scroll-triggered reveals) |
+| `responsive.css` | Mobile + tablet layer — loads last, only ever adds to the desktop rules |
+
+### Boot loader
+
+The loading screen is inlined in `index.html` (style + script, no extra
+requests) so it paints before `styles.css`, React and Babel arrive. It
+dismisses on real readiness — `document.fonts.ready`, the first React paint
+into `#root`, and `window.load` — then waits for two consecutive cheap frames
+before fading, so the handoff doesn't land on the shader compile. The 8s
+timeout is a stall guard only, never the normal path.
 
 ### Load order matters
 
@@ -40,7 +95,7 @@ two `<link>` tags reverts the site to the old dark theme.
 
 ## Assets
 
-`biobrain-assets/`, `brazil-assets/` and `maxhealth-assets/` hold the 40 project
+`biobrain-assets/`, `brazil-assets/`, `maxhealth-assets/` and `morework-assets/` hold the project
 screenshots referenced by `project-data.jsx`, as **WebP** capped at 2400px wide
 (4.1 MB total, down from 61 MB as PNG). `clippings/` and `screenshots/` are
 unreferenced extras kept for reference.

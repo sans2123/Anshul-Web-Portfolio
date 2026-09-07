@@ -4,19 +4,195 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Anshul Shukla — Product Designer</title>
+  <meta name="description" content="Product designer working on design systems, interfaces and the craft in between. Selected work, case studies and background." />
+  <meta name="author" content="Anshul Shukla" />
+  <meta name="theme-color" content="#ECEDF1" />
+  <meta name="color-scheme" content="light" />
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Anshul Shukla — Product Designer" />
+  <meta property="og:site_name" content="Anshul Shukla" />
+  <meta property="og:description" content="Product designer working on design systems, interfaces and the craft in between." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Anshul Shukla — Product Designer" />
+  <meta name="twitter:description" content="Product designer working on design systems, interfaces and the craft in between." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Chivo:ital,wght@0,300..900;1,300..900&display=swap">
 
   <!-- Base editorial layer, then the glass theme that overrides it. Order matters. -->
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="glass.css" />
+  <!-- Mobile + tablet layer. Last, so it only ever adds to the desktop rules. -->
+  <link rel="stylesheet" href="responsive.css" />
 
   <script type="application/json" id="speaker-notes">[]</script>
+
+  <!-- Loader. Inlined on purpose: it must paint before styles.css/React/Babel
+       arrive, so it costs one paint and zero extra requests. -->
+  <style>
+    #boot {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: #ECEDF1;
+      opacity: 1;
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      /* own layer, so the fade is a compositor-only job and never relayouts
+         or repaints the page that is booting up behind it */
+      will-change: opacity;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      contain: strict;
+    }
+    #boot.done { opacity: 0; pointer-events: none; }
+    /* stop the looping animations the instant the fade starts — they compete
+       with the page's own first frames (shader compile, lava layout, reveals) */
+    #boot.done #boot-panel,
+    #boot.done #boot-mark i,
+    #boot.done #boot-mark b,
+    #boot.done #boot-text { animation: none !important; }
+    #boot-panel {
+      display: flex; flex-direction: column; align-items: center; gap: 22px;
+      padding: 40px 46px 34px;
+      transform: translateY(6px) scale(0.985);
+      opacity: 0;
+      animation: bootIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+    }
+    @keyframes bootIn { to { transform: none; opacity: 1; } }
+
+    #boot-mark {
+      display: flex; align-items: center; gap: 10px;
+      font-family: "Bricolage Grotesque", "Chivo", sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      line-height: 1;
+      letter-spacing: -0.032em;
+      color: #131317;
+    }
+    #boot-mark i {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #131317;
+      animation: bootPulse 1.6s ease-in-out infinite;
+    }
+    #boot-mark b { display: block; animation: bootSpin 3.4s linear infinite; font-weight: 800; }
+    @keyframes bootPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.8); } }
+    @keyframes bootSpin { to { transform: rotate(360deg); } }
+
+    #boot-text {
+      font-family: "JetBrains Mono", monospace;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: #7C7D86;
+      background: linear-gradient(100deg, #7C7D86 34%, #131317 50%, #7C7D86 66%);
+      background-size: 260% 100%;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: bootShimmer 2.4s linear infinite;
+    }
+    @keyframes bootShimmer { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+
+    #boot-bar {
+      width: 180px; height: 2px; border-radius: 2px;
+      background: rgba(19,19,23,0.12);
+      overflow: hidden;
+    }
+    #boot-bar span {
+      display: block; height: 100%; width: 8%;
+      border-radius: 2px;
+      background: #131317;
+      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #boot-panel { animation: none; transform: none; opacity: 1; }
+      #boot-mark i, #boot-mark b, #boot-text { animation: none; }
+      #boot-text { -webkit-text-fill-color: #7C7D86; }
+      #boot-bar span { transition-duration: 0.2s; }
+    }
+  </style>
 </head>
 <body style="background-color: #ECEDF1">
+  <div id="boot" role="status" aria-live="polite">
+    <div id="boot-panel">
+      <div id="boot-mark"><i></i><b>&#10033;</b></div>
+      <div id="boot-text">Getting things ready</div>
+      <div id="boot-bar"><span></span></div>
+    </div>
+  </div>
+
   <div id="root"></div>
+
+  <script>
+  /* Dismiss on real readiness — fonts, first React paint, window load — not a timer.
+     The bar reflects those milestones; the 8s cap only exists so a stalled
+     third-party script can never trap the page behind the loader. */
+  (function () {
+    var el = document.getElementById('boot');
+    if (!el) return;
+    var fill = el.querySelector('#boot-bar span');
+    var at = 8, hit = { fonts: 0, mount: 0, load: 0 }, closed = 0;
+
+    function to(p) { at = Math.max(at, p); fill.style.width = at + '%'; }
+    function mark(k, p) {
+      if (hit[k]) return;
+      hit[k] = 1; to(p);
+      if (hit.mount && hit.load) close();
+    }
+    /* The page's heaviest frames land exactly at handoff: WebGL compile, lava
+       layout, reveal observers. Fading through them is what stuttered, so wait
+       for the main thread to actually settle (two cheap frames in a row) before
+       starting the fade, and hand over on a frame boundary. */
+    function settle(done) {
+      var tries = 0, prev = performance.now(), calm = 0;
+      (function tick(now) {
+        var dt = now - prev; prev = now;
+        calm = dt < 26 ? calm + 1 : 0;
+        if (calm >= 2 || ++tries > 40) done();
+        else requestAnimationFrame(tick);
+      })(prev);
+    }
+    function close() {
+      if (closed) return;
+      closed = 1; to(100);
+      setTimeout(function () {
+        settle(function () {
+          requestAnimationFrame(function () {
+            el.classList.add('done');
+            var gone = 0, fin = function () {
+              if (gone) return; gone = 1; el.remove();
+            };
+            el.addEventListener('transitionend', fin, { once: true });
+            setTimeout(fin, 900);
+          });
+        });
+      }, 220);
+    }
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { mark('fonts', 42); });
+    } else { mark('fonts', 42); }
+
+    var root = document.getElementById('root');
+    if (root.childElementCount) mark('mount', 76);
+    else {
+      var mo = new MutationObserver(function () {
+        if (root.childElementCount) { mo.disconnect(); requestAnimationFrame(function () { mark('mount', 76); }); }
+      });
+      mo.observe(root, { childList: true });
+    }
+
+    if (document.readyState === 'complete') mark('load', 88);
+    else window.addEventListener('load', function () { mark('load', 88); });
+
+    setTimeout(close, 8000);
+  })();
+  </script>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -34,6 +210,8 @@
 
   <!-- Background lava field + card tilt. Plain scripts, loaded after the app. -->
   <script src="lava.js"></script>
+  <script src="hero-shader.js"></script>
   <script src="tilt-fx.js"></script>
+  <script src="touch-fx.js"></script>
 </body>
 </html>

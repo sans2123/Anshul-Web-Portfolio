@@ -7,10 +7,15 @@ function Nav({ page, setPage }) {
   ];
   return (
     <nav className="nav">
-      <div className="nav-logo" data-cursor="hover">
+      <a
+        className="nav-logo"
+        href="#home"
+        data-cursor="hover"
+        onClick={(e) => { e.preventDefault(); setPage('home'); }}
+      >
         <span className="nav-logo-dot"></span>
         <span>ANSHUL/SHUKLA</span>
-      </div>
+      </a>
       <div className="nav-links">
         {pages.map((p) => (
           <a
@@ -28,7 +33,7 @@ function Nav({ page, setPage }) {
         ))}
       </div>
       <Magnetic>
-        <a className="nav-cta" href="#resume" data-cursor="text" data-cursor-label="Open" onClick={(e) => e.preventDefault()}>
+        <a className="nav-cta" href="anshul-shukla-resume.pdf" target="_blank" rel="noopener noreferrer" data-cursor="text" data-cursor-label="Open">
           <span>View Resume</span>
           <span className="nav-cta-arrow">↗</span>
         </a>
@@ -38,6 +43,32 @@ function Nav({ page, setPage }) {
 }
 
 function Footer({ setPage }) {
+  const EMAIL = 'Anshulshukla34772@gmail.com';
+  const [copied, setCopied] = React.useState(false);
+  const copyEmail = () => {
+    const done = () => { setCopied(true); setTimeout(() => setCopied(false), 1600); };
+    // execCommand path: works inside sandboxed iframes where the async API is blocked
+    const legacyCopy = () => {
+      const ta = document.createElement('textarea');
+      ta.value = EMAIL;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, EMAIL.length);
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      return ok;
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(EMAIL).then(done, () => { legacyCopy(); done(); });
+    } else {
+      legacyCopy();
+      done();
+    }
+  };
   return (
     <footer className="footer" data-screen-label="Footer">
       <Reveal>
@@ -50,13 +81,29 @@ function Footer({ setPage }) {
       <div className="footer-grid">
         <div>
           <div className="footer-col-title">— Get in touch</div>
-          <a className="footer-link" href="mailto:Anshulshukla34772@gmail.com" data-cursor="text" data-cursor-label="Email">
-            Anshulshukla34772@gmail.com
-          </a>
-          <a className="footer-link" href="#linkedin" data-cursor="text" data-cursor-label="Visit" onClick={(e) => e.preventDefault()}>
+          <div className="footer-email-row">
+            <a className="footer-link" href={`mailto:${EMAIL}`} data-cursor="text" data-cursor-label="Email">
+              {EMAIL}
+            </a>
+            <button
+              type="button"
+              className="copy-btn"
+              onClick={copyEmail}
+              data-cursor="hover"
+              aria-label={copied ? 'Email copied' : 'Copy email address'}
+            >
+              {copied ? (
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              ) : (
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
+              )}
+              <span>{copied ? 'Copied' : 'Copy'}</span>
+            </button>
+          </div>
+          <a className="footer-link" href="https://www.linkedin.com/in/anshul-shukla-a7938825b/" target="_blank" rel="noopener noreferrer" data-cursor="text" data-cursor-label="Visit">
             LinkedIn ↗
           </a>
-          <a className="footer-link" href="#resume" data-cursor="text" data-cursor-label="Open" onClick={(e) => e.preventDefault()}>
+          <a className="footer-link" href="anshul-shukla-resume.pdf" target="_blank" rel="noopener noreferrer" data-cursor="text" data-cursor-label="Open">
             View Resume ↗
           </a>
         </div>

@@ -1,0 +1,232 @@
+/* ============================================================
+   RESPONSIVE LAYER — tablet + phone only.
+   Loaded last. Every rule sits inside a max-width or
+   pointer/motion query, so the ≥1025px desktop render is
+   untouched. Nothing here restructures a component: it only
+   re-flows the existing grids and restores hover-only
+   affordances as tap / scroll states.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1 · REDUCED MOTION (all widths — an accessibility opt-in,
+   not a layout change)
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal-mask-inner { transform: none; transition: none; }
+  .marquee-track { animation: none; }
+  .asterisk-spin, .hero-eyebrow-dot, .bento-flag::before { animation: none; }
+  .page-curtain.active { animation: none; }
+  .sticker { transition: none; }
+  .nav-cta:hover, .nav-cta:hover .nav-cta-arrow { transform: none; }
+}
+
+/* ------------------------------------------------------------
+   2 · TOUCH AFFORDANCES (any coarse-pointer device, any width)
+   Hover was carrying real information here — the bento "View"
+   pill, the project row's number/meta, the skill-card wipe.
+   On touch those get a resting state, a press state, and a
+   scroll-centred state (touch-fx.js sets [data-inview]).
+   ------------------------------------------------------------ */
+@media (hover: none) {
+  /* cursor-following affordances have no touch analogue */
+  .project-card-preview { display: none; }
+
+  /* resting states: what hover used to reveal is simply visible */
+  .bento-card .pill-cta { opacity: 1; transform: none; }
+  .project-card-num { color: var(--ink); -webkit-text-stroke-color: var(--ink); }
+  .project-card-meta { opacity: 1; transform: none; }
+  .gallery-item-zoom, .gallery-item-more { opacity: 1; }
+
+  /* press feedback — the hover gesture, shortened */
+  .bento-card:active { transform: scale(0.988); }
+  .project-card:active { padding-left: 22px; padding-right: 22px; background: var(--glass-bg); }
+  .project-card:active .project-card-arrow { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .skill-tag:active { background: var(--ink); color: var(--paper); }
+  .skill-card:active { transform: translateY(-1px) scale(0.994); }
+  .gallery-item:active { transform: scale(0.994); }
+  .nav-cta:active { transform: scale(0.97); }
+  .nav-link:active { opacity: 0.65; }
+  .copy-btn:active { transform: scale(0.95); }
+  .footer-link:active, .project-hero-meta-link:active { color: var(--accent); }
+  .project-back:active { background: var(--accent); color: var(--paper); }
+
+  /* scroll-centred equivalents of the hover choreography */
+  .project-card[data-inview] {
+    background: var(--glass-bg);
+    box-shadow: var(--micro-shadow);
+    padding-left: 22px; padding-right: 22px;
+  }
+  .project-card[data-inview]::after { transform: scaleX(1); }
+  .project-card[data-inview] .project-card-title { transform: translateX(8px); color: var(--ink-2); }
+  .project-card[data-inview] .project-card-arrow {
+    background: var(--ink); color: var(--paper); border-color: var(--ink);
+    transform: rotate(-45deg) scale(1.06);
+  }
+
+  .bento-card[data-inview] {
+    box-shadow:
+      0 2px 3px rgba(60,63,76,0.06),
+      0 10px 18px rgba(60,63,76,0.09),
+      0 30px 56px rgba(60,63,76,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.85),
+      inset 0 -1px 0 rgba(60,63,76,0.05);
+  }
+
+  .skill-card[data-inview]::before { transform: scaleY(1); }
+  .skill-card[data-inview]::after { opacity: 1; transform: translate(0, 0); }
+  .skill-card[data-inview] .skill-card-num { color: rgba(8,7,6,0.75); letter-spacing: 0.24em; }
+  .skill-card[data-inview] h3 { color: var(--ink); transform: translateX(4px); }
+  .skill-card[data-inview] p { color: rgba(8,7,6,0.7); transform: translateX(4px); }
+
+  .exp-row[data-inview] .exp-row-mark { background: var(--accent); transform: scale(1.5); }
+  .gallery-item[data-inview] .gallery-item-zoom { opacity: 1; }
+
+  /* comfortable hit areas */
+  .nav-link, .nav-cta { min-height: 44px; }
+  .copy-btn { min-height: 40px; padding: 8px 12px; }
+  .lightbox-zoom-ctrl button { min-width: 34px; min-height: 34px; }
+}
+
+/* ------------------------------------------------------------
+   3 · TABLET  ≤ 980px
+   The base layer already stacks the big grids here and hides
+   .nav-links. Rather than swapping the nav for a hamburger, the
+   links pill drops onto its own full-width row under the
+   wordmark — same track, same inverted active chip, just
+   segmented and thumb-sized.
+   ------------------------------------------------------------ */
+@media (max-width: 980px) {
+  html, body { overflow-x: hidden; }
+
+  .nav {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    padding: max(12px, env(safe-area-inset-top)) 20px 10px;
+  }
+  .nav-logo { font-size: 1rem; }
+  .nav-cta { padding: 11px 15px; font-size: 0.7rem; letter-spacing: 0.1em; }
+  .nav-links {
+    display: flex;
+    order: 3;
+    width: 100%;
+    gap: 5px;
+    padding: 4px;
+  }
+  .nav-link {
+    flex: 1 1 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px;
+    padding: 12px 6px;
+    font-size: 0.7rem;
+    letter-spacing: 0.09em;
+    text-align: center;
+  }
+  .nav-cta { min-height: 44px; }
+
+  /* content clears the two-row bar */
+  .hero { padding-top: 172px; }
+  .work-hero, .about-hero { padding-top: 166px; }
+  .project-hero { padding-top: 152px; }
+
+  /* the back pill would land on the nav's second row — move it to
+     the thumb corner instead */
+  .project-back {
+    top: auto;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    left: 16px;
+    z-index: 120;
+  }
+
+  .hero-statement, .work-hero h1, .about-hero h1, .project-hero h1 { max-width: 100%; }
+  .hero-bottom { gap: 28px; }
+  .hero-meta { text-align: left; }
+  .work-hero-side, .project-hero-side { align-items: flex-start; text-align: left; }
+  .section-head { gap: 14px; }
+  .footer-bottom { flex-wrap: wrap; gap: 8px; }
+  .lightbox-caption { flex-wrap: wrap; row-gap: 6px; }
+}
+
+/* ------------------------------------------------------------
+   4 · PHONE  ≤ 640px
+   Same type hierarchy, one notch down the scale; same spacing
+   rhythm, proportionally tightened.
+   ------------------------------------------------------------ */
+@media (max-width: 640px) {
+  .hero { padding: 166px 18px 52px; }
+  .hero-eyebrow { font-size: 0.7rem; letter-spacing: 0.14em; }
+  .hero-name { font-size: 1.05rem; flex-wrap: wrap; gap: 8px; }
+  .hero-statement { font-size: clamp(2.35rem, 11.4vw, 3.6rem); margin-top: 34px; }
+  .hero-blurb { font-size: 1.02rem; max-width: 100%; }
+  .hero-meta { font-size: 0.72rem; gap: 8px; }
+
+  .marquee-track { gap: 40px; font-size: clamp(1.7rem, 9vw, 2.6rem); }
+
+  .bento-section, .work-list, .skills-section, .exp-section, .footer,
+  .project-hero, .project-body, .project-foot, .project-gallery { padding-left: 18px; padding-right: 18px; }
+  .bento-section, .exp-section { padding-top: 76px; padding-bottom: 76px; }
+  .section-head h2 { font-size: clamp(2.1rem, 10vw, 3.2rem); }
+  .section-head .meta { font-size: 0.68rem; }
+
+  .bento-grid { gap: 14px; }
+  .bento-grid > .bento-card { aspect-ratio: 4 / 3; min-height: 238px; }
+  .bento-card h3 { font-size: 1.35rem; }
+  .bento-flag { font-size: 0.64rem; padding: 7px 12px 6px; letter-spacing: 0.1em; }
+  .bento-card .pill-cta { font-size: 0.62rem; padding: 7px 10px; }
+
+  .outro { padding-top: 76px; padding-bottom: 76px; }
+  .outro-text { font-size: 1.14rem; }
+
+  .project-card { grid-template-columns: 52px 1fr 44px; gap: 16px; padding: 34px 14px; }
+  .project-card-title { font-size: clamp(1.9rem, 9.4vw, 2.9rem); }
+  .project-card-arrow { width: 40px; height: 40px; }
+
+  .work-hero h1 { font-size: clamp(2.9rem, 15vw, 4.6rem); }
+  .about-hero h1 { font-size: clamp(2.4rem, 13vw, 4rem); }
+  .about-bio-text { font-size: 1.16rem; }
+
+  .skills-grid { grid-template-columns: 1fr; }
+  .skill-card { padding: 26px 20px; border-right: none !important; }
+  .exp-row { padding-top: 26px; padding-bottom: 26px; }
+  .exp-role { font-size: 1.42rem; }
+  .exp-bullets li { font-size: 0.94rem; }
+
+  .project-hero h1 { font-size: clamp(2.3rem, 11.5vw, 3.6rem); }
+  .project-hero-meta { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .project-body-text { font-size: 1.06rem; }
+  .project-gallery { gap: 14px; padding-top: 44px; padding-bottom: 44px; }
+  .project-foot h3 { font-size: clamp(1.8rem, 9vw, 2.6rem); }
+
+  .footer { padding-top: 76px; }
+  .footer-headline { font-size: clamp(1.9rem, 9.6vw, 3rem); }
+  .footer-grid { gap: 40px; }
+  .footer-link { font-size: 1.2rem; }
+  .footer-email-row .footer-link { font-size: 0.98rem; overflow-wrap: anywhere; }
+  .footer-giant { font-size: clamp(3.6rem, 25vw, 8rem); }
+  .footer-bottom { font-size: 0.64rem; padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+  /* three 56vmax blurred blobs plus the hero shader is a lot of
+     fill-rate for a phone; same field, cheaper blur */
+  .blob { filter: blur(46px); }
+}
+
+/* ------------------------------------------------------------
+   5 · SMALL PHONE  ≤ 400px
+   ------------------------------------------------------------ */
+@media (max-width: 400px) {
+  .nav-logo { font-size: 0.9rem; }
+  .nav-cta { padding: 10px 12px; font-size: 0.66rem; }
+  .nav-link { font-size: 0.64rem; letter-spacing: 0.06em; padding: 11px 4px; }
+  .hero-statement { font-size: 2.2rem; }
+  .project-card { grid-template-columns: 44px 1fr 38px; gap: 12px; }
+  .project-hero-meta { grid-template-columns: 1fr; }
+}
+
+/* ------------------------------------------------------------
+   6 · SHORT LANDSCAPE PHONES — a 100vh hero would swallow the
+   whole screen with nothing below it
+   ------------------------------------------------------------ */
+@media (max-width: 980px) and (max-height: 520px) and (orientation: landscape) {
+  .hero { min-height: auto; padding-top: 146px; padding-bottom: 44px; }
+  .hero-statement { font-size: clamp(2rem, 6.6vw, 3rem); margin-top: 22px; }
+}
