@@ -19,10 +19,10 @@ function HomePage({ setPage, openProject }) {
   // 2 × 2 — each tile opens its project detail; cover art is pulled from that
   // project's own gallery. 'more' has no shot of its own, so it keeps the pattern.
   const bentoItems = [
-    { id: 'biobrain', title: 'BioBrain', tags: ['MROps', 'B2B', 'Restech', 'Branding', 'Design System'], variant: 'cream', label: 'BioBrain — analytics dashboard', img: 'biobrain-assets/home-cover.jpg', span: '7x5', flag: 'Start here' },
-    { id: 'maxhealth', title: 'Max MyHealth', tags: ['Healthcare', 'iOS', 'Android'], variant: 'accent', label: 'Max MyHealth — booking flow', img: 'maxhealth-assets/home-cover.jpg', span: '5x5' },
-    { id: 'brazil', title: 'Brazil Tournament Mgmt', tags: ['Sports', 'B2B', 'B2C'], variant: 'dark', label: 'Brazil TMS — tournament system', img: 'brazil-assets/home-cover.jpg', span: '5x4' },
-    { id: 'more', title: 'More Work', tags: ['Website', 'Redesign', 'Mix'], variant: 'lime', label: 'AEW, Felizeek & more', img: 'biobrain-assets/more-cover.jpg', span: '7x4' },
+    { id: 'biobrain', title: 'BioBrain', tags: ['Restech', 'Design System'], variant: 'cream', label: 'BioBrain — analytics dashboard', img: 'biobrain-assets/home-cover.jpg', span: '7x5', flag: 'Start here' },
+    { id: 'maxhealth', title: 'Max MyHealth', tags: ['Healthcare', 'Mobile'], variant: 'accent', label: 'Max MyHealth — booking flow', img: 'maxhealth-assets/home-cover.jpg', span: '5x5' },
+    { id: 'brazil', title: 'Brazil Tournament Mgmt', tags: ['Sports', 'B2B'], variant: 'dark', label: 'Brazil TMS — tournament system', img: 'brazil-assets/home-cover.jpg', span: '5x4' },
+    { id: 'more', title: 'More Work', tags: ['Websites', 'Redesign'], variant: 'lime', label: 'AEW, Felizeek & more', img: 'biobrain-assets/more-cover.jpg', span: '7x4' },
   ];
 
   const skillTags = [
@@ -88,7 +88,7 @@ function HomePage({ setPage, openProject }) {
       <section className="bento-section" data-screen-label="01 Home / Projects">
         <div className="section-head">
           <Reveal as="h2">Selected<br />projects.<span style={{ color: 'var(--accent)' }}>*</span></Reveal>
-          <Reveal delay={100} as="span" className="meta">(*) 2020 — 2026 / Click to expand</Reveal>
+          <Reveal delay={100} as="span" className="meta">(*) 2020 — 2026</Reveal>
         </div>
 
         <div className="bento-grid">
@@ -102,7 +102,6 @@ function HomePage({ setPage, openProject }) {
               data-cursor-label="Open"
               onClick={() => openProject && openProject(b.id)}
             >
-              {b.flag ? <span className="bento-flag">{b.flag}</span> : null}
               {b.img ? (
                 <img className="bento-card-img" src={b.img} alt={b.label} loading="lazy" decoding="async" />
               ) : (
@@ -113,14 +112,8 @@ function HomePage({ setPage, openProject }) {
                   <div className={`ph-pattern ${b.variant === 'accent' || b.variant === 'dark' ? 'dark' : ''}`} style={{ position: 'absolute', inset: 0 }}></div>
                 </div>
               )}
+              {b.flag ? <span className="bento-flag">{b.flag}</span> : null}
               <span className="pill-cta">View →</span>
-              <span style={{
-                position: 'absolute', top: b.flag ? 58 : 18, left: 22, fontFamily: 'var(--font-mono)',
-                fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.12em',
-                opacity: 0.65, zIndex: 2,
-              }}>
-                {b.label}
-              </span>
               <div className="bento-card-body">
                 <div className="tags">
                   {b.tags.map((t) => <span className="tag" key={t}>{t}</span>)}
@@ -136,7 +129,7 @@ function HomePage({ setPage, openProject }) {
       <section className="outro" data-screen-label="01 Home / Outro">
         <div className="glass-pane" data-glass-pane data-glass-intensity="0.32" aria-hidden="true"></div>
         <Reveal>
-          <div className="mono-cap" style={{ color: 'var(--muted)', marginBottom: 24 }}>— A little about me</div>
+          <div className="mono-cap" style={{ color: 'var(--muted)', marginBottom: 20 }}>— A little about me</div>
           <p className="outro-text">
             I&apos;m a Product Designer with <em>4+ years of experience</em> across healthcare, sports tech,
             research platforms, and enterprise. I trained at <em>NIFT</em> in design and technology — where I learned

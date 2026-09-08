@@ -216,13 +216,11 @@ function ProjectDetail({ project, onClose }) {
           </Reveal>
           <Reveal delay={120}>
             <p className="project-body-text">{project.body}</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 24 }}>
+            <div className="skill-tags project-body-tags">
               {project.tags.map((t) => (
-                <span key={t} style={{
-                  fontFamily: 'var(--font-mono)', fontSize: '0.7rem', textTransform: 'uppercase',
-                  letterSpacing: '0.1em', padding: '6px 12px', border: '1px solid var(--ink)',
-                  borderRadius: 999,
-                }}>{t}</span>
+                <Magnetic key={t} strength={0.2}>
+                  <span className="skill-tag" data-cursor="hover">{t}</span>
+                </Magnetic>
               ))}
             </div>
           </Reveal>

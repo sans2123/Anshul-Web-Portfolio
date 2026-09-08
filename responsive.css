@@ -16,6 +16,7 @@
   .reveal-mask-inner { transform: none; transition: none; }
   .marquee-track { animation: none; }
   .asterisk-spin, .hero-eyebrow-dot, .bento-flag::before { animation: none; }
+  .bento-card.is-featured { animation: none; }
   .page-curtain.active { animation: none; }
   .sticker { transition: none; }
   .nav-cta:hover, .nav-cta:hover .nav-cta-arrow { transform: none; }
@@ -31,6 +32,18 @@
 @media (hover: none) {
   /* cursor-following affordances have no touch analogue */
   .project-card-preview { display: none; }
+
+  /* iOS keeps the last-tapped element in :hover until the next tap, so a
+     tapped card would stay lifted after the press ended. This sits ABOVE the
+     :active rules below — same specificity, so the press state has to come
+     later to win (a tap matches :hover and :active at once). */
+  .bento-card:hover, .skill-card:hover, .gallery-item:hover { transform: none; }
+  /* the latched :hover would also swap the mobile-tuned glow back to the
+     desktop stack and stop the breathe. Restoring the animation is enough —
+     running keyframes outrank the rule's own box-shadow. */
+  .bento-card.is-featured:hover {
+    animation: featuredGlow 6s var(--ease-in-out) infinite;
+  }
 
   /* resting states: what hover used to reveal is simply visible */
   .bento-card .pill-cta { opacity: 1; transform: none; }
@@ -86,6 +99,8 @@
   .nav-link, .nav-cta { min-height: 44px; }
   .copy-btn { min-height: 40px; padding: 8px 12px; }
   .lightbox-zoom-ctrl button { min-width: 34px; min-height: 34px; }
+  .skill-tag { min-height: 34px; display: inline-flex; align-items: center; }
+  .footer-link, .project-hero-meta-link { min-height: 34px; display: inline-flex; align-items: center; }
 }
 
 /* ------------------------------------------------------------
@@ -145,6 +160,40 @@
   .section-head { gap: 14px; }
   .footer-bottom { flex-wrap: wrap; gap: 8px; }
   .lightbox-caption { flex-wrap: wrap; row-gap: 6px; }
+
+  /* Lava field: desktop chains an SVG metaball filter with a CSS blur
+     (`filter: url(#lava-goo) blur(38px)`). Mobile and tablet GPUs routinely
+     bail out of that chain on a viewport-sized fixed layer — iOS Safari and
+     Chrome Android drop the url() reference rather than rasterise it, so the
+     blobs paint as hard-edged grey shapes. A single CSS blur is the one filter
+     every mobile compositor handles reliably, so drop the SVG stage here and
+     blur harder to recover the soft, merged silhouette it was producing.
+     Desktop keeps the real goo filter — this only applies below 980px. */
+  .lava-goo {
+    filter: blur(52px);
+    /* the goo filter's alpha ramp was carrying part of the density; without it
+       the same opacity reads thin */
+    opacity: calc(var(--blob-opacity, 0.46) * 1.24);
+  }
+  /* soft-edged sources blur into each other far better than hard circles,
+     which is what the feColorMatrix stage was doing on desktop */
+  .lava-blob { filter: blur(6px); }
+  .lava-blob.g1 { background: radial-gradient(circle at 50% 45%, var(--glow-1) 0%, var(--glow-1) 58%, transparent 78%); }
+  .lava-blob.g2 { background: radial-gradient(circle at 50% 45%, var(--glow-2) 0%, var(--glow-2) 58%, transparent 78%); }
+  .lava-blob.g3 { background: radial-gradient(circle at 50% 45%, var(--glow-3) 0%, var(--glow-3) 58%, transparent 78%); }
+
+  /* Section rhythm. The desktop layer runs a 168px vertical rhythm, but only
+     some sections were being brought back down here — .about-bio, .skills-section
+     and the work list's tail kept the full desktop figure, so the page
+     alternated between a tight and a huge gap on the way down. One figure for
+     every section, and .about-bio joins the side-padding list it was missing
+     from (it was the only section still indented 36px). */
+  .bento-section, .outro, .skills-section, .exp-section, .about-bio {
+    padding-top: 100px; padding-bottom: 100px;
+  }
+  .work-list { padding-bottom: 100px; }
+  .footer { padding-top: 100px; }
+  .about-bio { padding-left: 20px; padding-right: 20px; }
 }
 
 /* ------------------------------------------------------------
@@ -162,20 +211,42 @@
 
   .marquee-track { gap: 40px; font-size: clamp(1.7rem, 9vw, 2.6rem); }
 
-  .bento-section, .work-list, .skills-section, .exp-section, .footer,
+  .bento-section, .outro, .work-list, .skills-section, .exp-section, .footer,
+  .about-bio,
   .project-hero, .project-body, .project-foot, .project-gallery { padding-left: 18px; padding-right: 18px; }
-  .bento-section, .exp-section { padding-top: 76px; padding-bottom: 76px; }
+  .bento-section, .outro, .skills-section, .exp-section, .about-bio {
+    padding-top: 76px; padding-bottom: 76px;
+  }
+  .work-list { padding-bottom: 76px; }
+  .project-body { padding-top: 60px; padding-bottom: 60px; }
+  /* the rule under the heading needs less air at this scale — 64px left the
+     head reading as its own detached block */
+  .section-head { padding-bottom: 16px; margin-bottom: 32px; }
   .section-head h2 { font-size: clamp(2.1rem, 10vw, 3.2rem); }
   .section-head .meta { font-size: 0.68rem; }
 
+  /* reveals travel less: 28px of lift is a long way on a 640px-tall screen and
+     reads as lag when several fire during one flick-scroll */
+  .reveal { transform: translateY(16px); transition-duration: 0.62s; }
+  .reveal-mask-inner { transition-duration: 0.7s; }
+
   .bento-grid { gap: 14px; }
   .bento-grid > .bento-card { aspect-ratio: 4 / 3; min-height: 238px; }
+  /* the card's own inset drops with it, so the flag, the CTA and the glass
+     body panel all stay on one 16px margin instead of eating a phone-sized
+     card's short edge */
+  .bento-card { padding: 16px; }
   .bento-card h3 { font-size: 1.35rem; }
-  .bento-flag { font-size: 0.64rem; padding: 7px 12px 6px; letter-spacing: 0.1em; }
-  .bento-card .pill-cta { font-size: 0.62rem; padding: 7px 10px; }
+  .bento-flag { top: 16px; left: 16px; font-size: 0.64rem; padding: 7px 12px 6px; letter-spacing: 0.1em; }
+  .bento-card .pill-cta { top: 16px; right: 16px; font-size: 0.62rem; padding: 7px 10px; }
+  .bento-card .tags { gap: 5px; }
+  .bento-card .tag { font-size: 0.6rem; padding: 3px 8px 3px 9px; }
+  .bento-card.has-image .bento-card-body { padding: 11px 14px 13px; }
 
   .outro { padding-top: 76px; padding-bottom: 76px; }
   .outro-text { font-size: 1.14rem; }
+  .outro-skills { gap: 16px; }
+  .skill-tags { gap: 10px 7px; }
 
   .project-card { grid-template-columns: 52px 1fr 44px; gap: 16px; padding: 34px 14px; }
   .project-card-title { font-size: clamp(1.9rem, 9.4vw, 2.9rem); }
@@ -208,6 +279,32 @@
   /* three 56vmax blurred blobs plus the hero shader is a lot of
      fill-rate for a phone; same field, cheaper blur */
   .blob { filter: blur(46px); }
+
+  /* The featured glow animates a four-layer box-shadow whose outermost blur is
+     110px+ — on desktop that repaint is free, on a phone it dirties a region
+     far larger than the card, every frame, while the lava field is already
+     compositing. Same breathing glow, radii pulled in to roughly the card's
+     own footprint. */
+  /* :hover included so this still wins over the desktop
+     `.bento-card.is-featured:hover` rule on latched-hover touch devices */
+  .bento-card.is-featured,
+  .bento-card.is-featured:hover { animation-name: featuredGlowMobile; animation-duration: 7s; }
+  @keyframes featuredGlowMobile {
+    0%, 100% {
+      box-shadow:
+        var(--micro-shadow),
+        0 2px 8px -2px rgba(43,92,237,0.26),
+        0 6px 20px -6px rgba(43,92,237,0.34),
+        0 12px 38px -12px rgba(43,92,237,0.36);
+    }
+    50% {
+      box-shadow:
+        var(--micro-shadow),
+        0 2px 10px -2px rgba(43,92,237,0.40),
+        0 8px 26px -6px rgba(43,92,237,0.50),
+        0 16px 48px -12px rgba(43,92,237,0.52);
+    }
+  }
 }
 
 /* ------------------------------------------------------------
@@ -220,6 +317,10 @@
   .hero-statement { font-size: 2.2rem; }
   .project-card { grid-template-columns: 44px 1fr 38px; gap: 12px; }
   .project-hero-meta { grid-template-columns: 1fr; }
+  /* at this width the flag and the CTA pill start to meet across the card */
+  .bento-flag { font-size: 0.6rem; letter-spacing: 0.08em; padding: 6px 10px 5px; }
+  .bento-card .pill-cta { font-size: 0.58rem; padding: 6px 9px; }
+  .footer-headline { font-size: clamp(1.75rem, 10.6vw, 2.4rem); }
 }
 
 /* ------------------------------------------------------------
@@ -229,4 +330,16 @@
 @media (max-width: 980px) and (max-height: 520px) and (orientation: landscape) {
   .hero { min-height: auto; padding-top: 146px; padding-bottom: 44px; }
   .hero-statement { font-size: clamp(2rem, 6.6vw, 3rem); margin-top: 22px; }
+}
+
+/* ------------------------------------------------------------
+   7 · REDUCED MOTION — last word.
+   Sections 2 and 4 set the featured glow on `.is-featured:hover` (0,3,0) to
+   survive iOS's latched hover. Section 1's opt-out is (0,2,0) and earlier in
+   the file, so it lost both ties — a reduced-motion user who tapped the card
+   started the breathe and could not stop it. Same specificity, last in order.
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .bento-card.is-featured,
+  .bento-card.is-featured:hover { animation: none; }
 }

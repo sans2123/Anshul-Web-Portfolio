@@ -147,22 +147,35 @@
     /* The page's heaviest frames land exactly at handoff: WebGL compile, lava
        layout, reveal observers. Fading through them is what stuttered, so wait
        for the main thread to actually settle (two cheap frames in a row) before
-       starting the fade, and hand over on a frame boundary. */
+       starting the fade, and hand over on a frame boundary.
+       Every wait here is raced against a timer: rAF is suspended in background
+       tabs, and a loader that can only dismiss on a visible frame would sit on
+       top of a finished page until the visitor focuses it. */
     function settle(done) {
+      if (document.hidden) return done();
+      var fired = 0, fin = function () { if (!fired) { fired = 1; done(); } };
       var tries = 0, prev = performance.now(), calm = 0;
+      setTimeout(fin, 1200);
       (function tick(now) {
+        if (fired) return;
         var dt = now - prev; prev = now;
         calm = dt < 26 ? calm + 1 : 0;
-        if (calm >= 2 || ++tries > 40) done();
+        if (calm >= 2 || ++tries > 40) fin();
         else requestAnimationFrame(tick);
       })(prev);
+    }
+    function frame(fn) {
+      var ran = 0, go = function () { if (!ran) { ran = 1; fn(); } };
+      if (document.hidden) return go();
+      requestAnimationFrame(go);
+      setTimeout(go, 250);
     }
     function close() {
       if (closed) return;
       closed = 1; to(100);
       setTimeout(function () {
         settle(function () {
-          requestAnimationFrame(function () {
+          frame(function () {
             el.classList.add('done');
             var gone = 0, fin = function () {
               if (gone) return; gone = 1; el.remove();
@@ -182,7 +195,7 @@
     if (root.childElementCount) mark('mount', 76);
     else {
       var mo = new MutationObserver(function () {
-        if (root.childElementCount) { mo.disconnect(); requestAnimationFrame(function () { mark('mount', 76); }); }
+        if (root.childElementCount) { mo.disconnect(); frame(function () { mark('mount', 76); }); }
       });
       mo.observe(root, { childList: true });
     }

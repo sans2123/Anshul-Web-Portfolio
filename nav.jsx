@@ -73,8 +73,8 @@ function Footer({ setPage }) {
     <footer className="footer" data-screen-label="Footer">
       <Reveal>
         <h2 className="footer-headline">
-          Good design starts with a <em>conversation.</em><br />
-          Thanks for being here — let&apos;s start one.
+          Let&apos;s start<br />
+          a <em>conversation.</em>
         </h2>
       </Reveal>
 
