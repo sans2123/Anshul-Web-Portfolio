@@ -131,7 +131,7 @@ function HomePage({ setPage, openProject }) {
         <Reveal>
           <div className="mono-cap" style={{ color: 'var(--muted)', marginBottom: 20 }}>— A little about me</div>
           <p className="outro-text">
-            I&apos;m a Product Designer with <em>4+ years of experience</em> across healthcare, sports tech,
+            I&apos;m a Product Designer with <em>5+ years of experience</em> across healthcare, sports tech,
             research platforms, and enterprise. I trained at <em>NIFT</em> in design and technology — where I learned
             that good design is, above all else, a way of <em>communicating</em>.
           </p>

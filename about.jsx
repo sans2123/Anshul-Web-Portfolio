@@ -91,7 +91,7 @@ function AboutPage() {
               I earned my bachelor&apos;s in <em>Design and Technology</em> from <strong>NIFT</strong>.
             </p>
             <p>
-              Since then, I&apos;ve spent <em>4+ years</em> shipping design across B2B and B2C — in product, distribution,
+              Since then, I&apos;ve spent <em>5+ years</em> shipping design across B2B and B2C — in product, distribution,
               services, healthcare, and research orgs like <strong>BioBrain</strong>, <strong>AEW</strong>, and
               <strong> Max Healthcare</strong>. Most recently as a Sr. UI/UX Lead, where I&apos;ve been responsible
               for cross-functional collaboration from concept all the way through launch.
