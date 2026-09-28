@@ -209,7 +209,9 @@
   .hero-blurb { font-size: 1.02rem; max-width: 100%; }
   .hero-meta { font-size: 0.72rem; gap: 8px; }
 
-  .marquee-track { gap: 40px; font-size: clamp(1.7rem, 9vw, 2.6rem); }
+  .marquee-track { font-size: clamp(1.7rem, 9vw, 2.6rem); }
+  .marquee-track span { gap: 40px; }
+  .marquee-track .marquee-half { padding-right: 40px; }
 
   .bento-section, .outro, .work-list, .skills-section, .exp-section, .footer,
   .about-bio,
@@ -332,6 +334,21 @@
   .hero-statement { font-size: clamp(2rem, 6.6vw, 3rem); margin-top: 22px; }
 }
 
+@media (max-width: 640px) {
+  .project-role { margin-top: 44px; }
+  .project-body-main .project-body-tags { margin-top: 32px; }
+  .project-role-item { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 16px 0; }
+  .project-role-text { font-size: 0.98rem; }
+}
+@media (hover: none) {
+  .project-role-item:hover .project-role-text { transform: none; }
+  .project-role-item.is-lit:hover .project-role-text { transform: none; }
+}
+
+@media (max-width: 640px) {
+  .project-card-flag { font-size: 0.6rem; padding: 6px 11px 5px; gap: 6px; margin-bottom: 12px; letter-spacing: 0.1em; }
+}
+
 /* ------------------------------------------------------------
    7 · REDUCED MOTION — last word.
    Sections 2 and 4 set the featured glow on `.is-featured:hover` (0,3,0) to
@@ -342,4 +359,5 @@
 @media (prefers-reduced-motion: reduce) {
   .bento-card.is-featured,
   .bento-card.is-featured:hover { animation: none; }
+  .project-role-text { opacity: 1; transform: none; transition: none; }
 }

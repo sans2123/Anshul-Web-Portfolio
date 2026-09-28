@@ -34,13 +34,14 @@ function ProjectCard({ project, index, onOpen }) {
   return (
     <Reveal
       delay={index * 80}
-      className="project-card"
+      className={`project-card ${project.flag ? 'is-featured' : ''}`}
       data-cursor="text"
       data-cursor-label="Open"
       onClick={onOpen}
     >
       <span className="project-card-num">{project.num}</span>
       <h2 className="project-card-title">
+        {project.flag ? <span className="project-card-flag">{project.flag}</span> : null}
         {project.title} <em style={{ fontFamily: '"Instrument Serif", serif', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>{project.title_em}</em>
       </h2>
       <div className="project-card-meta">
@@ -159,6 +160,50 @@ function GalleryTile({ item, index, onOpen }) {
   );
 }
 
+// Contributions light up one by one as they cross the lower third of the
+// viewport, and stay lit — reading order is scroll order. One observer per
+// list, no scroll listeners. Without IO or with reduced motion, all start lit.
+function RoleList({ items }) {
+  const ref = React.useRef(null);
+  const [lit, setLit] = React.useState(0);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (rm || !('IntersectionObserver' in window)) { setLit(items.length); return; }
+    const rows = Array.from(el.querySelectorAll('.project-role-item'));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const i = rows.indexOf(e.target);
+        setLit((n) => Math.max(n, i + 1));
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -30% 0px', threshold: 0.6 });
+    rows.forEach((r) => io.observe(r));
+    return () => io.disconnect();
+  }, [items]);
+
+  return (
+    <div className="project-role" ref={ref}>
+      <Reveal delay={140}>
+        <div className="project-role-head">
+          <span className="project-role-title">How I shaped it</span>
+          <span className="project-role-count">{String(lit).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</span>
+        </div>
+      </Reveal>
+      <ol className="project-role-list" style={{ '--role-progress': items.length ? lit / items.length : 0 }}>
+        {items.map((c, i) => (
+          <li key={i} className={`project-role-item ${i < lit ? 'is-lit' : ''}`} style={{ '--i': i }}>
+            <span className="project-role-num">{String(i + 1).padStart(2, '0')}</span>
+            <span className="project-role-text">{c}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
 function ProjectDetail({ project, onClose }) {
   const [lightbox, setLightbox] = React.useState(null);
   React.useEffect(() => {
@@ -214,16 +259,23 @@ function ProjectDetail({ project, onClose }) {
           <Reveal>
             <span className="project-body-label">— About the project</span>
           </Reveal>
-          <Reveal delay={120}>
-            <p className="project-body-text">{project.body}</p>
-            <div className="skill-tags project-body-tags">
-              {project.tags.map((t) => (
-                <Magnetic key={t} strength={0.2}>
-                  <span className="skill-tag" data-cursor="hover">{t}</span>
-                </Magnetic>
-              ))}
-            </div>
-          </Reveal>
+          <div className="project-body-main">
+            <Reveal delay={120}>
+              <p className="project-body-text">{project.body}</p>
+            </Reveal>
+            {project.contributions && project.contributions.length ? (
+              <RoleList items={project.contributions} />
+            ) : null}
+            <Reveal delay={160}>
+              <div className="skill-tags project-body-tags">
+                {project.tags.map((t) => (
+                  <Magnetic key={t} strength={0.2}>
+                    <span className="skill-tag" data-cursor="hover">{t}</span>
+                  </Magnetic>
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </section>
 
         <section className="project-gallery">

@@ -311,9 +311,15 @@ img, svg { display: block; max-width: 100%; }
   overflow: hidden;
   padding: 18px 0;
 }
+/* no gap on the track itself: a gap between the two halves made -50% land
+   32px short of the seam, so the loop visibly jumped each cycle. The spacing
+   lives inside each half (trailing padding = inner gap) so both halves are
+   identical and -50% is exact. */
 .marquee-track {
-  display: flex; gap: 64px;
-  animation: marquee 28s linear infinite;
+  display: flex; width: max-content;
+  animation: marquee 130s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(2rem, 5vw, 4.5rem);
@@ -322,8 +328,9 @@ img, svg { display: block; max-width: 100%; }
   white-space: nowrap;
 }
 .marquee-track span { display: inline-flex; align-items: center; gap: 64px; }
+.marquee-track .marquee-half { flex: none; padding-right: 64px; }
 .marquee-track .asterisk-spin { color: var(--accent); font-size: 0.7em; }
-@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
 
 /* ===== Bento Projects (Home) ===== */
 .bento-section {
@@ -876,6 +883,52 @@ img, svg { display: block; max-width: 100%; }
 }
 .project-card:hover .project-card-arrow { background: var(--accent); color: var(--paper); border-color: var(--accent); transform: rotate(-45deg); }
 
+/* "Start here" on the lead row — same pill + breathing dot as the home bento
+   flag, sat above the title. The row's arrow also sends out a slow ripple so
+   the eye lands on the click target, not just the label. */
+.project-card-flag {
+  display: flex; align-items: center; gap: 8px;
+  width: max-content;
+  margin-bottom: 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.68rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 8px 14px 7px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px -6px rgba(8,7,6,0.45);
+}
+.project-card-flag::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--paper);
+  animation: flagDot 2.8s var(--ease-in-out) infinite;
+}
+.project-card.is-featured .project-card-arrow { position: relative; }
+.project-card.is-featured .project-card-arrow::after {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  animation: arrowRipple 2.8s var(--ease-out) infinite;
+  pointer-events: none;
+}
+@keyframes arrowRipple {
+  0%   { opacity: 0.7; transform: scale(1); }
+  70%  { opacity: 0;   transform: scale(1.55); }
+  100% { opacity: 0;   transform: scale(1.55); }
+}
+.project-card.is-featured:hover .project-card-arrow::after { animation: none; opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .project-card-flag::before,
+  .project-card.is-featured .project-card-arrow::after { animation: none; }
+}
+
 /* ===== Project Detail Overlay ===== */
 .project-detail {
   position: fixed; inset: 0;
@@ -1015,6 +1068,70 @@ img, svg { display: block; max-width: 100%; }
   color: var(--ink);
 }
 .project-body-text strong { color: var(--accent); font-weight: 700; }
+
+/* Description + contributions share the right column: paragraph, then the
+   list, then tags. Rhythm: 56px paragraph→list, 40px list→tags. */
+.project-body-main { display: flex; flex-direction: column; min-width: 0; }
+.project-body-main .project-body-tags { margin-top: 40px; }
+.project-role { margin-top: 56px; }
+.project-role-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-bottom: 14px;
+}
+.project-role-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.project-role-count {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.project-role-list {
+  position: relative;
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+/* progress rail: ink line over the top hairline, fills as items light */
+.project-role-list::before {
+  content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 100%;
+  background: var(--ink);
+  transform: scaleX(var(--role-progress, 0)); transform-origin: left;
+  transition: transform 0.8s var(--ease-out);
+}
+.project-role-item {
+  position: relative;
+  display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.project-role-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem; line-height: 1;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  padding-top: 0.55em;
+  transition: color 0.5s var(--ease-out);
+}
+.project-role-text {
+  font-family: var(--font-body);
+  font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--ink);
+  opacity: 0.32;
+  transform: translateY(8px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.project-role-item.is-lit .project-role-num { color: var(--accent); }
+.project-role-item.is-lit .project-role-text { opacity: 1; transform: none; }
+.project-role-item:hover .project-role-text { transform: translateX(6px); }
 
 .project-gallery {
   padding: 80px 60px 120px;

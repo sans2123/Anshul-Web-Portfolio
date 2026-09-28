@@ -102,25 +102,25 @@ function Magnetic({ children, strength = 0.25, className = '', ...rest }) {
 
 // Animated marquee
 function Marquee({ items }) {
+  // Each half repeats the list twice so one half is always wider than the
+  // viewport (a short list left an empty stretch before the loop came round),
+  // and the track animates by exactly one half, so the seam is invisible.
+  const run = items.concat(items);
+  const half = (k, hidden) => (
+    <span className="marquee-half" aria-hidden={hidden ? 'true' : undefined}>
+      {run.map((t, i) => (
+        <React.Fragment key={k + i}>
+          <span>{t}</span>
+          <span className="asterisk-spin">✸</span>
+        </React.Fragment>
+      ))}
+    </span>
+  );
   return (
     <div className="marquee" data-cursor="hover">
       <div className="marquee-track">
-        <span>
-          {items.map((t, i) => (
-            <React.Fragment key={`a${i}`}>
-              <span>{t}</span>
-              <span className="asterisk-spin">✸</span>
-            </React.Fragment>
-          ))}
-        </span>
-        <span aria-hidden="true">
-          {items.map((t, i) => (
-            <React.Fragment key={`b${i}`}>
-              <span>{t}</span>
-              <span className="asterisk-spin">✸</span>
-            </React.Fragment>
-          ))}
-        </span>
+        {half('a', false)}
+        {half('b', true)}
       </div>
     </div>
   );

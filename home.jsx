@@ -82,7 +82,7 @@ function HomePage({ setPage, openProject }) {
       </section>
 
       {/* ============ MARQUEE ============ */}
-      <Marquee items={['Selected Work', 'BioBrain', 'Max MyHealth', 'WTT Federation', 'AEW', 'Brazil TMS']} />
+      <Marquee items={['BioBrain', 'Max MyHealth', 'WTT Federation', 'AEW', 'Brazil TMS']} />
 
       {/* ============ PROJECTS BENTO ============ */}
       <section className="bento-section" data-screen-label="01 Home / Projects">

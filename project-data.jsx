@@ -2,6 +2,7 @@
 const PROJECTS = [
   {
     id: 'biobrain',
+    flag: 'Start here',
     num: '01',
     title: 'BioBrain',
     title_em: 'Insights',
@@ -14,14 +15,16 @@ const PROJECTS = [
     tagline: 'A next-gen Market Research Operations platform — unifying AI, automation, and agility into one workspace.',
     body: (
       <>
-        BioBrain empowers researchers and decision-makers with an end-to-end MROps platform that eliminates
-        manual errors, ensures data quality, and delivers deep insights at <strong>record speed</strong>.
-        Built on 100+ years of combined industry experience, it folds survey programming, data processing,
-        and boardroom-ready insights into a singular interface — replacing siloed tools, decks, and spreadsheets.
-        I reworked the product from the ground up for its Q4 2024 launch — establishing brand guidelines,
-        a comprehensive design system, the logo, website architecture, product navigation, process flows, and user journeys.
+        BioBrain is an end-to-end MROps platform that folds survey programming, data processing and
+        boardroom-ready insights into a single interface — replacing siloed tools, decks and spreadsheets,
+        and delivering insights at <strong>record speed</strong>.
       </>
     ),
+    contributions: [
+      'Reworked and revamped a ResTech product (BioBrain) from the ground up — targeted for Q4 2024 launch.',
+      'Established brand guidelines and a comprehensive design system.',
+      'Redesigned logo, branding, website architecture, product navigation, process flows, and user journeys.',
+    ],
     galleryItems: [
       { src: 'biobrain-assets/dashboard.webp', col: 'span 8', row: 'span 4', label: 'Analytics dashboard', pos: 'top' },
       { src: 'biobrain-assets/login.webp', col: 'span 4', row: 'span 4', label: 'Login', pos: 'center' },
@@ -43,40 +46,8 @@ const PROJECTS = [
     ],
   },
   {
-    id: 'brazil',
-    num: '02',
-    title: 'Brazil',
-    title_em: 'TMS',
-    year: '2022 — 23',
-    role: 'UI/UX Designer',
-    company: 'Stupa Analytics',
-    duration: '10 months',
-    tags: ['Sports Tech', 'Esports', 'B2B Platform', 'Dashboards'],
-    tagline: 'A tournament management system built for local and international bodies — automating brackets, scoring, and player registration across sports and esports.',
-    body: (
-      <>
-        Tournament organizers in Brazil have long lived inside spreadsheets and group chats. This platform replaces
-        the manual chaos with <strong>real-time data tracking</strong>, automated bracket generation, customized
-        league standings, and integrated player registration. From a Sunday futsal cup to a 64-team esports league,
-        the system scales the same way. Delivered end-to-end for the Brazil Sports Federation: B2B tooling for
-        organizers, B2C experiences for players and fans, and a unified analytics layer powering it all.
-      </>
-    ),
-    galleryItems: [
-      { src: 'brazil-assets/tms-start.webp', col: 'span 7', row: 'span 4', label: 'Tournament Management System — entry', pos: 'top' },
-      { src: 'brazil-assets/landing-page.webp', col: 'span 5', row: 'span 8', label: 'Public events landing page', pos: 'top' },
-      { src: 'brazil-assets/event-creation.webp', col: 'span 7', row: 'span 5', label: 'Event creation — details & categories', pos: 'top' },
-      { src: 'brazil-assets/add-officials-start.webp', col: 'span 6', row: 'span 3', label: 'Add officials — overview', pos: 'top' },
-      { src: 'brazil-assets/add-officials.webp', col: 'span 6', row: 'span 3', label: 'Add officials — member & bulk import', pos: 'top' },
-      { src: 'brazil-assets/live-stream.webp', col: 'span 5', row: 'span 4', label: 'Live stream — quality & branding', pos: 'top' },
-      { src: 'brazil-assets/results-knockout.webp', col: 'span 7', row: 'span 4', label: 'Results — knockout matches', pos: 'top' },
-      { src: 'brazil-assets/results-group.webp', col: 'span 6', row: 'span 3', label: 'Results — group / playoff', pos: 'top' },
-      { src: 'brazil-assets/videos.webp', col: 'span 6', row: 'span 3', label: 'Live & streamed match videos', pos: 'top' },
-    ],
-  },
-  {
     id: 'maxhealth',
-    num: '03',
+    num: '02',
     title: 'Max',
     title_em: 'MyHealth',
     year: '2020 — 22',
@@ -87,14 +58,15 @@ const PROJECTS = [
     tagline: 'A unified digital healthcare portal — appointments, video consults, lab tests, IPD tracking, and an emergency button, all under one roof.',
     body: (
       <>
-        Max MyHealth manages patient care across the entire Max Hospitals network from a single mobile app.
-        Patients book in-person visits or video consults across <strong>30+ medical specialties</strong>, access
-        urgent care within ~10 minutes, schedule lab tests and home healthcare, and store every prescription,
-        report, and discharge summary in a centralized vault. The IPD tracker keeps an eye on hospital stays
-        with itemized bills, and a one-tap emergency button surfaces the nearest facility instantly.
-        I led UX revamps and new feature modules across product and marketing, working with cross-functional teams.
+        Max MyHealth runs patient care across the Max Hospitals network from one app — in-person and video
+        consults across <strong>30+ medical specialties</strong>, lab tests, home care, a records vault,
+        IPD tracking and a one-tap emergency button.
       </>
     ),
+    contributions: [
+      'Worked across Product and Marketing, collaborating with cross-functional teams end-to-end.',
+      'Created new feature modules and revamped existing user journeys for the main website and mobile app.',
+    ],
     galleryItems: [
       { src: 'maxhealth-assets/web-booking.webp', col: 'span 7', row: 'span 4', label: 'Web — appointment booking flow', pos: 'top' },
       { src: 'maxhealth-assets/blog-article.webp', col: 'span 5', row: 'span 8', label: 'Web — health blog article', pos: 'top' },
@@ -113,6 +85,40 @@ const PROJECTS = [
     ],
   },
   {
+    id: 'brazil',
+    num: '03',
+    title: 'Brazil',
+    title_em: 'TMS',
+    year: '2022 — 23',
+    role: 'UI/UX Designer',
+    company: 'Stupa Analytics',
+    duration: '10 months',
+    tags: ['Sports Tech', 'Esports', 'B2B Platform', 'Dashboards'],
+    tagline: 'A tournament management system built for local and international bodies — automating brackets, scoring, and player registration across sports and esports.',
+    body: (
+      <>
+        A tournament platform for the Brazil Sports Federation that replaces spreadsheets and group chats with
+        <strong> real-time data tracking</strong>, automated brackets, league standings and player registration —
+        scaling from a Sunday futsal cup to a 64-team esports league.
+      </>
+    ),
+    contributions: [
+      'Designed complete design systems for the Brazil Sports Federation and World Table Tennis Federation (WTT).',
+      'Delivered B2B and B2C solutions for event creation, management, analysis, and broadcasting.',
+    ],
+    galleryItems: [
+      { src: 'brazil-assets/tms-start.webp', col: 'span 7', row: 'span 4', label: 'Tournament Management System — entry', pos: 'top' },
+      { src: 'brazil-assets/landing-page.webp', col: 'span 5', row: 'span 8', label: 'Public events landing page', pos: 'top' },
+      { src: 'brazil-assets/event-creation.webp', col: 'span 7', row: 'span 5', label: 'Event creation — details & categories', pos: 'top' },
+      { src: 'brazil-assets/add-officials-start.webp', col: 'span 6', row: 'span 3', label: 'Add officials — overview', pos: 'top' },
+      { src: 'brazil-assets/add-officials.webp', col: 'span 6', row: 'span 3', label: 'Add officials — member & bulk import', pos: 'top' },
+      { src: 'brazil-assets/live-stream.webp', col: 'span 5', row: 'span 4', label: 'Live stream — quality & branding', pos: 'top' },
+      { src: 'brazil-assets/results-knockout.webp', col: 'span 7', row: 'span 4', label: 'Results — knockout matches', pos: 'top' },
+      { src: 'brazil-assets/results-group.webp', col: 'span 6', row: 'span 3', label: 'Results — group / playoff', pos: 'top' },
+      { src: 'brazil-assets/videos.webp', col: 'span 6', row: 'span 3', label: 'Live & streamed match videos', pos: 'top' },
+    ],
+  },
+  {
     id: 'more',
     num: '04',
     title: 'More',
@@ -125,14 +131,15 @@ const PROJECTS = [
     tagline: 'A grab-bag of end-to-end projects — enterprise dashboards, a marketing-site redesign, and early-stage product explorations.',
     body: (
       <>
-        A curated selection from across my career: <strong>water and electrical distribution dashboards</strong> for
-        Allied Engineering Works — large-scale industrial UX with a partial frontend handoff;
-        a full <strong>marketing site redesign for Felizeek</strong> — home, services, about and a blog system
-        rebuilt end to end; and early-stage product work at <strong>Work Companion</strong> alongside a few smaller
-        experiments I&apos;m fond of. Each project sharpened a different muscle — systems thinking, data density,
-        editorial layout, or the discipline of shipping fast.
+        A selection from across my career: a <strong>marketing-site redesign for Felizeek</strong>, distribution
+        dashboards for Allied Engineering Works, and product work at Work Companion — plus a few smaller experiments.
       </>
     ),
+    contributions: [
+      'Revamped marketing websites end to end — information architecture, page layouts and a reusable blog system.',
+      'Reworked key pages on existing products, sharpening hierarchy, conversion paths and visual consistency.',
+      'Picked up focused screens across other products — from industrial dashboards to subscription flows — and shipped them fast.',
+    ],
     galleryItems: [
       { src: 'morework-assets/home.jpg', col: 'span 4', row: 'span 5', label: 'Felizeek — home', pos: 'top' },
       { src: 'morework-assets/about-us.jpg', col: 'span 4', row: 'span 5', label: 'Felizeek — about', pos: 'top' },
